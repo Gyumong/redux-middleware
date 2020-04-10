@@ -26,13 +26,25 @@ const SampleContainer= ({
             />
     );
 };
-
+useEffect(()=>{
+    // useEffect에 파라미터로 넣는 함수는 async로 할수 없기 때문에
+    // 그 내부에서 async 함수를 선언하고 호출해 줍니다.
+    const fn= async ()=>{
+        try{
+            await getPost(1);
+            await getUsers(1);
+        }catch(e){
+            console.log(e); // 에러 조회
+        }
+    };
+    fn();
+},[getPost,getUsers]);
 export default connect(
-    ({sample}) =>({
+    ({sample, loading}) =>({
         post:sample.post,
         users: sample.users,
-        loadingPost:sample.loading.GET_POAST,
-        loadingUsers:sample.loading.GET_USERS
+        loadingPost:loading['sample/GET_POST'],
+        loadingUsers:loading['sample/GET_USERS']
     }),
     {
     getPost,
